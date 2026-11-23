@@ -1,0 +1,2 @@
+# JURNAL-GURU-PENGGANTI
+Mudah di Akses
