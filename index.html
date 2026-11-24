@@ -91,6 +91,10 @@
                     <span>📖</span>
                     <span>Jurnal Guru Pengganti</span>
                 </button>
+                <button type="button" id="portal-btn-chpw" onclick="openPortalChangePwModal()" title="Ganti Password Pribadi" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-amber-500 hover:bg-amber-600 text-blue-950 shadow transition flex items-center justify-center gap-1">
+                    <span>🔑</span>
+                    <span class="hidden md:inline">Ganti Password</span>
+                </button>
                 <button type="button" onclick="logoutPortalUnified()" title="Keluar dari Portal" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-rose-600 hover:bg-rose-700 text-white shadow transition flex items-center justify-center gap-1">
                     <span>🚪</span>
                     <span class="hidden md:inline">Keluar</span>
@@ -98,6 +102,39 @@
             </div>
         </div>
     </nav>
+
+    <!-- MODAL GANTI PASSWORD GURU & TENDIK (SAAT SUDAH MASUK PORTAL) -->
+    <div id="portal-chpw-modal" class="no-print-portal hidden fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-sky-200 fade-in">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mx-auto mb-2.5">🔑</div>
+            <h3 class="text-base sm:text-lg font-extrabold text-blue-950 text-center">Ganti Password Guru &amp; Tendik</h3>
+            <p class="text-xs text-slate-500 text-center mt-0.5 mb-4">Password baru berlaku untuk Daftar Hadir &amp; Jurnal Pengganti</p>
+
+            <form onsubmit="submitPortalChangePw(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-extrabold text-blue-950 mb-1">Nama Guru / Tendik</label>
+                    <input type="text" id="m-chpw-name" list="u-daftar-guru" autocomplete="off" placeholder="Ketik nama Anda..." class="w-full px-3.5 py-2 rounded-xl border border-sky-200 bg-sky-50/40 focus:bg-white text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-blue-950 mb-1">Password Lama</label>
+                    <input type="password" id="m-chpw-old" autocomplete="off" placeholder="Masukkan password lama..." class="w-full px-3.5 py-2 rounded-xl border border-sky-200 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-blue-950 mb-1">Password Baru (min. 4 karakter)</label>
+                    <input type="password" id="m-chpw-new" autocomplete="off" placeholder="Masukkan password baru..." class="w-full px-3.5 py-2 rounded-xl border border-sky-200 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-blue-950 mb-1">Ulangi Password Baru</label>
+                    <input type="password" id="m-chpw-new2" autocomplete="off" placeholder="Ketik ulang password baru..." class="w-full px-3.5 py-2 rounded-xl border border-sky-200 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-sky-500">
+                </div>
+                <div id="m-chpw-feedback" class="hidden p-2.5 rounded-xl text-xs font-bold text-center"></div>
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="closePortalChangePwModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-sky-600 hover:from-blue-800 hover:to-sky-700 text-white font-extrabold text-xs shadow">Simpan Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- GERBANG MASUK TERPADU UNTUK KEDUA APLIKASI -->
     <div id="unified-portal-login" class="no-print-portal fixed inset-0 z-[70] portal-login-bg flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden">
@@ -175,6 +212,24 @@
                     Masuk ke Daftar Hadir
                 </button>
             </form>
+
+            <!-- Panel Ubah Password Mandiri Guru & Tendik di Halaman Masuk -->
+            <details id="u-chpw-details" class="mt-4 rounded-2xl border border-sky-200 bg-sky-50/70 px-3.5 py-2.5">
+                <summary class="text-xs font-extrabold text-blue-800 cursor-pointer select-none flex items-center justify-between">
+                    <span>🔑 Ganti Password Guru &amp; Tendik</span>
+                    <span class="text-[10px] font-semibold text-sky-700">Klik untuk buka</span>
+                </summary>
+                <div class="space-y-2.5 mt-3 pt-2.5 border-t border-sky-200/70">
+                    <input type="text" id="u-chpw-name" list="u-daftar-guru" autocomplete="off" placeholder="Nama lengkap Guru / Tendik" class="w-full px-3 py-2 text-xs font-bold border border-sky-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="password" id="u-chpw-old" autocomplete="off" placeholder="Password lama (bawaan: SDI 1028)" class="w-full px-3 py-2 text-xs font-bold border border-sky-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="password" id="u-chpw-new" autocomplete="off" placeholder="Password baru (min. 4 karakter)" class="w-full px-3 py-2 text-xs font-bold border border-sky-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <input type="password" id="u-chpw-new2" autocomplete="off" placeholder="Ulangi password baru" class="w-full px-3 py-2 text-xs font-bold border border-sky-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <div id="u-chpw-feedback" class="hidden p-2 rounded-xl text-[11px] font-bold text-center"></div>
+                    <button type="button" onclick="changeUnifiedTeacherPassword()" class="w-full py-2.5 px-4 bg-blue-800 hover:bg-blue-900 text-white font-extrabold text-xs rounded-xl shadow transition">
+                        Simpan Password Baru
+                    </button>
+                </div>
+            </details>
         </div>
     </div>
 
@@ -3533,16 +3588,135 @@
         function getStoredJurnalTeacherPw(name) {
             try {
                 const all = JSON.parse(localStorage.getItem('jurnal_guru_pengganti_passwords_v1')) || {};
-                return all[uNormText(name)] || 'SDI 1028';
+                return all[uNormText(name)] || '';
             } catch (e) {
-                return 'SDI 1028';
+                return '';
             }
+        }
+
+        function saveStoredTeacherPw(officialName, newPassword) {
+            const all = JSON.parse(localStorage.getItem('jurnal_guru_pengganti_passwords_v1') || '{}');
+            all[uNormText(officialName)] = newPassword.trim();
+            localStorage.setItem('jurnal_guru_pengganti_passwords_v1', JSON.stringify(all));
+        }
+
+        function verifyTeacherCredential(officialName, rawPass) {
+            const customPw = getStoredJurnalTeacherPw(officialName);
+            if (customPw) {
+                return uNormPass(rawPass) === uNormPass(customPw);
+            }
+            return uNormPass(rawPass) === uNormPass('SDI1028');
+        }
+
+        function showInlineFeedback(elId, msg, isSuccess) {
+            const el = document.getElementById(elId);
+            if (!el) return;
+            el.textContent = msg;
+            el.className = isSuccess
+                ? 'p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-bold text-center'
+                : 'p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold text-center';
+            el.classList.remove('hidden');
+        }
+
+        function changeUnifiedTeacherPassword() {
+            const rawName = document.getElementById('u-chpw-name').value.trim();
+            const oldPw = document.getElementById('u-chpw-old').value;
+            const newPw = document.getElementById('u-chpw-new').value;
+            const newPw2 = document.getElementById('u-chpw-new2').value;
+
+            const officialName = resolveUnifiedTeacher(rawName);
+            if (!officialName) {
+                showInlineFeedback('u-chpw-feedback', 'Nama tidak ditemukan. Pilih dari daftar nama Guru / Tendik.', false);
+                return;
+            }
+            if (!verifyTeacherCredential(officialName, oldPw)) {
+                showInlineFeedback('u-chpw-feedback', 'Password lama salah!', false);
+                return;
+            }
+            if (newPw.trim().length < 4) {
+                showInlineFeedback('u-chpw-feedback', 'Password baru minimal 4 karakter.', false);
+                return;
+            }
+            if (newPw !== newPw2) {
+                showInlineFeedback('u-chpw-feedback', 'Konfirmasi ulangi password baru tidak cocok.', false);
+                return;
+            }
+            try {
+                saveStoredTeacherPw(officialName, newPw);
+            } catch (err) {
+                showInlineFeedback('u-chpw-feedback', 'Gagal menyimpan password baru.', false);
+                return;
+            }
+            ['u-chpw-name', 'u-chpw-old', 'u-chpw-new', 'u-chpw-new2'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('u-login-name').value = officialName;
+            showInlineFeedback('u-chpw-feedback', `✅ Password ${officialName.split(',')[0]} berhasil diganti! Silakan masuk dengan password baru.`, true);
+        }
+
+        function openPortalChangePwModal() {
+            const modal = document.getElementById('portal-chpw-modal');
+            const nameInp = document.getElementById('m-chpw-name');
+            const fb = document.getElementById('m-chpw-feedback');
+            if (fb) fb.classList.add('hidden');
+            ['m-chpw-old', 'm-chpw-new', 'm-chpw-new2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            if (portalSession && portalSession.role === 'guru' && nameInp) {
+                nameInp.value = portalSession.name;
+            } else if (nameInp) {
+                nameInp.value = '';
+            }
+            modal?.classList.remove('hidden');
+        }
+
+        function closePortalChangePwModal() {
+            document.getElementById('portal-chpw-modal')?.classList.add('hidden');
+        }
+
+        function submitPortalChangePw(e) {
+            e.preventDefault();
+            const rawName = document.getElementById('m-chpw-name').value.trim();
+            const oldPw = document.getElementById('m-chpw-old').value;
+            const newPw = document.getElementById('m-chpw-new').value;
+            const newPw2 = document.getElementById('m-chpw-new2').value;
+
+            const officialName = resolveUnifiedTeacher(rawName);
+            if (!officialName) {
+                showInlineFeedback('m-chpw-feedback', 'Nama Guru / Tendik tidak terdaftar.', false);
+                return;
+            }
+            if (!verifyTeacherCredential(officialName, oldPw)) {
+                showInlineFeedback('m-chpw-feedback', 'Password lama salah!', false);
+                return;
+            }
+            if (newPw.trim().length < 4) {
+                showInlineFeedback('m-chpw-feedback', 'Password baru minimal 4 karakter.', false);
+                return;
+            }
+            if (newPw !== newPw2) {
+                showInlineFeedback('m-chpw-feedback', 'Konfirmasi password baru tidak sama.', false);
+                return;
+            }
+            try {
+                saveStoredTeacherPw(officialName, newPw);
+                if (portalSession && portalSession.name === officialName) {
+                    portalSession.pass = newPw.trim();
+                }
+            } catch (err) {
+                showInlineFeedback('m-chpw-feedback', 'Gagal menyimpan password baru.', false);
+                return;
+            }
+            showInlineFeedback('m-chpw-feedback', `✅ Password ${officialName.split(',')[0]} berhasil diperbarui!`, true);
+            setTimeout(() => closePortalChangePwModal(), 1200);
         }
 
         function setUnifiedLoginMode(mode) {
             unifiedMode = mode;
             const isGuru = mode === 'guru';
             document.getElementById('u-name-wrap').classList.toggle('hidden', !isGuru);
+            document.getElementById('u-chpw-details')?.classList.toggle('hidden', !isGuru);
             document.getElementById('u-tab-guru').className = isGuru
                 ? 'py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-blue-700 to-sky-600 text-white shadow'
                 : 'py-2 rounded-xl text-xs font-bold text-blue-900 hover:bg-sky-100/70 transition';
@@ -3631,7 +3805,7 @@
                         const tPassInp = doc.getElementById('landingTeacherPassword');
                         if (tNameInp && tPassInp && typeof win.enterAsTeacher === 'function') {
                             tNameInp.value = portalSession.name;
-                            tPassInp.value = getStoredJurnalTeacherPw(portalSession.name);
+                            tPassInp.value = getStoredJurnalTeacherPw(portalSession.name) || 'SDI 1028';
                             win.enterAsTeacher();
                         }
                     }
@@ -3675,10 +3849,7 @@
                     showUnifiedError('Nama tidak terdaftar dalam daftar pendidik.');
                     return;
                 }
-                const customJurnalPw = getStoredJurnalTeacherPw(officialName);
-                const validDefault = uNormPass(pass) === uNormPass('SDI1028');
-                const validCustom = uNormPass(pass) === uNormPass(customJurnalPw);
-                if (!validDefault && !validCustom) {
+                if (!verifyTeacherCredential(officialName, pass)) {
                     showUnifiedError('Password salah!');
                     return;
                 }
